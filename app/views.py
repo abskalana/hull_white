@@ -60,7 +60,6 @@ def api_hullwhite_auto(request):
 
 def draw_data(hw):
     fig, ax = plt.subplots()
-    ax.set_color_cycle(['red', 'blue', 'black'])
     N = hw.nbr_steps
     min_rate = hw.steps[0].nodes[0].rate
 
