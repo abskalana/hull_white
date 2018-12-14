@@ -73,25 +73,49 @@
 
             </nav>
 
-            <br><br><br>
+            <br>
 
 
                <div class="page-header" style="margin: 1%">
-                <h1>
+                <h3>
                     Hull White
                     <small> Numerical implementation of Hull White model using python</small>
-                </h1>
+                </h3>
                 <p>
                     The purpose of this website is to implement the interest rate model Hull White
             </div>
-            <br><br>
+
+            <div class="row center-block" style="margin: 1%">
+
+                Le code  se trouve ici : <a href="https://github.com/fmgrlab/hull_white_model">https://github.com/fmgrlab/hull_white_model</a>
 
 
-            <div class="row center-block text-center">
 
-                Le code  se trouve ici : <a href="https://github.com/abskalana/hull_white">https://github.com/abskalana/hull_white </a>
+                <br><br>
 
-                Un api de test
+                Un API for test with the interest rate calculated by by: 0.08 - 0.05Exp(-0.18ti. According the publication of Hull and White (1994), this corresponds approximately to the U.S. term structure at the beginning of 1994
+
+                 <br><br><a href="{% url 'api_hull_white_auto'%}">Test API </a>
+
+
+                <br><br>
+
+                Un real api is provided by the following :  <a href="{% url 'api_hull_white' %}">Lien</a>
+
+                <br>
+                Aguments:<br>
+                <br> volatitlity
+                <br>maturity
+                <br>alpha
+                <br>period
+                <br> rate
+                <br>
+                <br><br>
+                Sample :
+
+                volatility=0.01&alpha=0.1&maturity=4&period=year&rate=0.0509389&rate=0.0579733&rate=0.0630595&rate=0.0673464&rate=0.0694816
+
+                <br>
 
 
 
