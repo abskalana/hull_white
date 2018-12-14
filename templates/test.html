@@ -1,0 +1,86 @@
+{% extends "test_parent.html" %}
+
+
+{% block content %}
+
+    <div class="row" style=" margin: 1%; padding: 10px;border: 1px solid #8c8c8c;min-height: 15cm;overflow-x: scroll">
+
+        <div style="display: flex; justify-content: center;">{{ graph|safe }}</div>
+
+    </div>
+
+    <div class="row" style=" margin: 1%; padding: 1px;overflow-x: scroll">
+
+        <table cellpadding="5" class="table table-bordered table-hover table-condensed">
+            <tr>
+                <th>Node</th>
+
+                {% for hwstep in hw.steps %}
+
+                    {% for item in hwstep.nodes %}
+                        <td style="font-weight: bold">
+                            {{ item.id }}
+                        </td>{% endfor %}
+                {% endfor %}
+            </tr>
+            <tr>
+                <th>Rate</th>
+
+                {% for hwstep in hw.steps %}
+
+                    {% for item in hwstep.nodes %}
+                        <td>
+                            {{ item.as_json.rate }}
+                        </td>{% endfor %}
+                {% endfor %}
+            </tr>
+
+            <tr>
+                <th>Pu</th>
+
+                {% for hwstep in hw.steps %}
+
+                    {% for item in hwstep.nodes %}
+                        <td>
+                            {{ item.pu|floatformat:4 }}
+                        </td>{% endfor %}
+                {% endfor %}
+            </tr>
+
+            <tr>
+                <th>Pm</th>
+
+                {% for hwstep in hw.steps %}
+
+                    {% for item in hwstep.nodes %}
+                        <td>
+                            {{ item.pm |floatformat:4 }}
+                        </td>{% endfor %}
+                {% endfor %}
+            </tr>
+
+            <tr>
+                <th>Pd</th>
+
+                {% for hwstep in hw.steps %}
+
+                    {% for item in hwstep.nodes %}
+                        <td>
+                            {{ item.pd |floatformat:4 }}
+                        </td>{% endfor %}
+                {% endfor %}
+            </tr>
+
+        </table>
+
+
+    </div>
+
+
+
+
+
+
+{% endblock %}
+
+

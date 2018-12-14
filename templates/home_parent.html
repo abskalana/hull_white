@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Hull White model</title>
+
+    <meta name="description" content=" Numerical implementation of Hull White model using python">
+    <meta name="author" content="Ayten Fabricio Ali">
+
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+
+</head>
+<style>
+
+    table {
+        border-collapse: separate;
+        border-spacing: 0;
+        border-top: 1px solid grey;
+    }
+
+    td, th {
+        margin: 0;
+        border: 1px solid grey;
+        white-space: nowrap;
+        border-top-width: 0px;
+    }
+
+    .headcol {
+        position: absolute;
+        width: 5em;
+        left: 0;
+        top: auto;
+        border-top-width: 1px;
+        /*only relevant for first row*/
+        margin-top: -1px;
+        /*compensate for top border*/
+    }
+
+    .headcol2 {
+        position: absolute;
+        width: 5em;
+        right: 0;
+        top: auto;
+        border-top-width: 1px;
+        /*only relevant for first row*/
+        margin-top: -1px;
+        /*compensate for top border*/
+        background-color: white;
+    }
+
+    .headcol:before {
+        content: 'Row ';
+    }
+
+    .long {
+        background: yellow;
+        letter-spacing: 1em;
+    }
+
+</style>
+<body onc>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <nav class="navbar navbar-default navbar-inverse" role="navigation">
+                <div class="navbar-header">
+
+                    <button type="button" class="navbar-toggle" data-toggle="collapse"
+                            data-target="#bs-example-navbar-collapse-1">
+                        <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span
+                            class="icon-bar"></span><span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="/">Hull White</a>
+                </div>
+
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav">
+
+
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <a href="/test/">Test</a>
+                        </li>
+
+                        <li>
+                            <a href="/document/">Resources</a>
+                        </li>
+                        <li>
+                            <a href="/about/">About</a>
+                        </li>
+                    </ul>
+                </div>
+
+            </nav>
+
+
+            <div class="page-header" style="margin: 1%">
+                <h1>
+                    Hull White
+                    <small> Numerical implementation of Hull White model using python</small>
+                </h1>
+                <p>
+                    The purpose of this website is to implement the interest rate model Hull White
+            </div>
+            <br><br>
+
+            <form role="form" name="computeForm" id="computeForm" method="post" action="/">
+            {% csrf_token %}
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-5">
+                            <div class="form-group row">
+
+                                <div class="col-xs-3">
+                                    <label for="volatility">Volatility</label>
+                                    <input class="form-control" name="volatility" value="{{ hw.volatility }}"
+                                           onkeypress="return isNumberKey(event)">
+                                </div>
+
+                                <div class="col-xs-3">
+                                    <label for="alpha">Alpha </label>
+                                    <input class="form-control" id="alpha" name="alpha" value="{{ hw.alpha }}"
+                                           onkeypress="return isNumberKey(event)">
+                                </div>
+
+                                <div class="col-xs-3">
+                                    <label for="maturity">Maturity (year)</label>
+                                    <input class="form-control" id="maturity" name="maturity"
+                                           value="{{ hw.maturity }}" onchange="addInput()" onkeypress="return isNumberKey(event)">
+                                </div>
+
+                                <div class="col-xs-3">
+                                    <label for="ex3">Period</label>
+                                    <select class="form-control" id="period" name="period" onchange="addInput()">
+
+                                        {% if hw.period == 'years' %}
+                                            <option value="year" selected>Year</option>
+                                        {% else %}
+                                            <option value="year">Year</option>
+                                        {% endif %}
+
+                                        {% if hw.period == 'days' %}
+                                            <option value="day" selected>Day</option>
+                                        {% else %}
+                                            <option value="day">Days</option>
+                                        {% endif %}
+
+                                        {% if hw.period == 'week' %}
+                                            <option value="week" selected>Week</option>
+                                        {% else %}
+                                            <option value="week">Week</option>
+                                        {% endif %}
+
+                                        {% if hw.period == 'month' %}
+                                            <option value="month" selected>Month</option>
+                                        {% else %}
+                                            <option value="month">Month</option>
+                                        {% endif %}
+
+                                        {% if hw.period == 'quarter' %}
+                                            <option value="quarter" selected>Quarter</option>
+                                        {% else %}
+                                            <option value="quarter">Quarter</option>
+                                        {% endif %}
+
+                                        {% if hw.step == 'semester' %}
+                                            <option value="semester" selected>Semester</option>
+                                        {% else %}
+                                            <option value="semester">Semester</option>
+                                        {% endif %}
+
+                                    </select>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group row">
+                                <div class="col-xs-12">
+                                    <label for="rate">Entrer les taux </label><br>
+                                    <form>
+                                        <input type="radio" name="source_rate" value="manual" checked
+                                               style="margin-left: 10px" onchange="onManual()"> Manual
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-5">
+                            <div class="form-group row">
+                                <div style="overflow-x: scroll;width: 100%; white-space: nowrap;">
+                                    <span id="ratebar"></span>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="margin: 20px">
+                        <div class="col-md-3"></div>
+                        <div class="col-md-6">
+                            <input type="submit" class="btn btn-block  btn-primary" id="exampleInputEmail1"/>
+                        </div>
+                        <div class="col-md-3"></div>
+                    </div>
+                </div>
+            </form>
+
+
+            {% block content %}  {% endblock %}
+        </div>
+    </div>
+
+</div>
+</div>
+
+<script src="/static/js/jquery.min.js"></script>
+<script src="/static/js/bootstrap.min.js"></script>
+
+<script type="text/javascript">
+
+    window.onload = function () {
+        addInput();
+        onManual()
+    }
+
+    function addInput() {
+        var foo = document.getElementById("ratebar");
+        while (foo.firstChild) foo.removeChild(foo.firstChild);
+        var maturity = parseFloat(document.getElementById("maturity").value);
+        var period = document.getElementById("period").value;
+        var N = maturity
+        if (period.startsWith("s")) {
+            N = maturity * 2
+        }
+        if (period.startsWith("q")) {
+            N = maturity * 4
+        }
+
+        if (period.startsWith("m")) {
+            N = maturity * 12
+        }
+        if (period.startsWith("w")) {
+            N = maturity * 52
+        }
+        if (period.startsWith("d")) {
+            N = maturity * 280
+        }
+        N = N + 1
+        for (var i = 0; i < N; i++) {
+            var element = document.createElement("input");
+            element.setAttribute("name", "rate");
+            element.setAttribute("id", "rate" + i);
+            element.setAttribute("style", "border: 2px solid #CCC; width:80px;height:40px; margin : 10px; padding: 10px");
+            var newlabel = document.createElement("Label");
+            newlabel.setAttribute("for", "rate" + i);
+            newlabel.innerHTML = "Rate period " + (i + 1);
+            foo.appendChild(newlabel);
+            foo.appendChild(element);
+        }
+    }
+    function onManual() {
+        var input_js = ({{ hw.rates|safe }})
+        for (var i = 0; i < input_js.length; i++) {
+            var element = document.getElementById("rate" + i);
+            element.value = input_js[i];
+        }
+    }
+
+    	function isNumberKey(evt) {
+				var charCode = (evt.which) ? evt.which : evt.keyCode;
+				if (charCode != 46 && charCode > 31 && (charCode < 48 || charCode > 57)){
+				    return false;
+                }
+				return true;
+			}
+
+</script>
+</body>
+</html>
