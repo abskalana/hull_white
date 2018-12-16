@@ -128,13 +128,12 @@ def draw_data(hw):
 
 
 def parseRequest(request,hwc):
-    maturity = math.fabs(float(request.POST.get('maturity')))
-    hwc.maturity = maturity
-    alpha = math.fabs(float(request.POST.get('alpha')))
+    alpha = math.fabs(float(request.POST.get('alpha', 0.1)))
     hwc.alpha = alpha
-    volatility = math.fabs(float(request.POST.get('volatility')))
+    volatility = math.fabs(float(request.POST.get('volatility', 0.01)))
     hwc.volatility = volatility
-
+    maturity = math.fabs(float(request.POST.get('maturity',0.05)))
+    hwc.maturity = maturity
     period_name = request.POST.get('period','year')
     print(period_name)
     period = get_period_value(period_name)
