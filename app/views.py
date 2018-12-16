@@ -20,7 +20,6 @@ def home(request):
             return render(request, 'home.html', {"hw": hwc, 'graph': graph})
         else :
             return render(request, 'home_error.html', {"hw": hwc})
-    hwc = HWCalculator()
     hwc.maturity = 5
     hwc.alpha = 0.1
     hwc.period = 'year'
@@ -57,7 +56,14 @@ def about(request):
 
 
 def api_hullwhite(request):
-    hwc = parseRequest(request=request)
+    hwc = HWCalculator()
+    hwc.maturity = 5
+    hwc.alpha = 0.1
+    hwc.volatility = 0.014
+    hwc.period = "year"
+    hwc.nbr_steps = 5
+    hwc.rates = []
+    parseRequest(request=request,hwc =  hwc)
     if len(hwc.rates) >= hwc.nbr_steps + 1:
         hwc.execute()
     return JsonResponse(hwc.as_json())
