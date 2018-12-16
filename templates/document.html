@@ -76,50 +76,54 @@
             <br>
 
 
-               <div class="page-header" style="margin: 1%">
+               <div class="row" style="margin: 1%">
                 <h3>
-                    Hull White
-                    <small> Numerical implementation of Hull White model using python</small>
+                    Code on Github
+                </h3><br>
+
+                   <a href="https://github.com/fmgrlab/hull_white_model">https://github.com/fmgrlab/hull_white_model</a>
+                   <br>
+                </div>
+
+
+            <div class="row" style="margin: 1%">
+                <h3>
+                    Graph structure by API
                 </h3>
                 <p>
-                    The purpose of this website is to implement the interest rate model Hull White
+                    We also setup a programming interface access (api) to provide a reusable graph structure in json
+                </p>
+
+                <b>Request Path</b> : http://fmgrlab.org/api/hullwhite/
+                <br><br>
+                <b>Request Parameter:</b><br><br>
+                <li> volatitlity (for example  : volatitlity = 0.01</li>
+                <li>maturity (for example  : maturity = 5)</li>
+                <li>alpha (for example alpha = 0.1</li>
+                <li>period (for example period = year</li>
+                <li>Interest rate : a list of interest rate :rate=0.0509389&rate=0.0579733</li>
+<br><br>
+                <b>Sample</b><br><br>
+
+                <a href="http://fmgrlab.org/api/hullwhite/?volatility=0.01&alpha=0.1&maturity=4&period=year&rate=0.0509389&rate=0.0579733&rate=0.0630595&rate=0.0673464&rate=0.0694816">http://fmgrlab.org/api/hullwhite/?volatility=0.01&alpha=0.1&maturity=4&period=year&rate=0.0509389&rate=0.0579733&rate=0.0630595&rate=0.0673464&rate=0.0694816</a>
+
+                <br><br>
+                To test the api, we had generated  the interest rate calculated  by: 0.08 - 0.05Exp(-0.18ti. According the publication of Hull and White (1994), this corresponds approximately to the U.S. term structure at the beginning of 1994
+                <br><br>
+                <a href="{% url 'api_hull_white_auto'%}">http://fmgrlab.org/api/test/auto/</a>
+
             </div>
 
-            <div class="row center-block" style="margin: 1%">
-
-                Le code  se trouve ici : <a href="https://github.com/fmgrlab/hull_white_model">https://github.com/fmgrlab/hull_white_model</a>
-
-
-
+            <div class="row" style="margin: 1%">
+                <h3>
+                    Publication
+                </h3><br>
+                The document presented is shared online in slideshare. Follow the link below to get it
                 <br><br>
+                   <a href="https://github.com/fmgrlab/hull_white_model"> SlidShare</a>
+                   <br><br><br>
+                </div>
 
-                Un API for test with the interest rate calculated by by: 0.08 - 0.05Exp(-0.18ti. According the publication of Hull and White (1994), this corresponds approximately to the U.S. term structure at the beginning of 1994
-
-                 <br><br><a href="{% url 'api_hull_white_auto'%}">Test API </a>
-
-
-                <br><br>
-
-                Un real api is provided by the following :  <a href="{% url 'api_hull_white' %}">Lien</a>
-
-                <br>
-                Aguments:<br>
-                <br> volatitlity
-                <br>maturity
-                <br>alpha
-                <br>period
-                <br> rate
-                <br>
-                <br><br>
-                Sample :
-
-                volatility=0.01&alpha=0.1&maturity=4&period=year&rate=0.0509389&rate=0.0579733&rate=0.0630595&rate=0.0673464&rate=0.0694816
-
-                <br>
-
-
-
-            </div>
         </div>
     </div>
 
