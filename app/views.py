@@ -11,24 +11,42 @@ from pylab import *
 
 
 def home(request):
-    hwc = parseRequest(request=request)
+    hwc = HWCalculator()
     if request.POST:
+        parseRequest(request=request, hwc = hwc)
         if len(hwc.rates) >= hwc.nbr_steps +1 :
             hwc.execute()
             graph = draw_data(hwc)
             return render(request, 'home.html', {"hw": hwc, 'graph': graph})
         else :
             return render(request, 'home_error.html', {"hw": hwc})
+    hwc = HWCalculator()
+    hwc.maturity = 5
+    hwc.alpha = 0.1
+    hwc.period = 'year'
+    hwc.volatility = 0.01
     return render(request, 'home_parent.html', {"hw": hwc})
 
 def auto_generate(request):
-    hwc = parseRequest(request=request)
-    hwc.rates = []
-    for i in range(0, hwc.nbr_steps + 1, 1):
+    hwc = HWCalculator()
+    hwc.maturity = 5
+    hwc.alpha = 0.1
+    hwc.period = 'year'
+    hwc.volatility = 0.01
+    hwc.nbr_steps = 5
+    for i in range(len(hwc.rates), hwc.nbr_steps + 2, 1):
         hwc.rates.append(0.08 - 0.05 * math.exp(-0.18 * i))
+
+    if request.POST:
+         parseRequest(request=request, hwc = hwc)
+         if len(hwc.rates) < hwc.nbr_steps + 1:
+           for i in range(len(hwc.rates), hwc.nbr_steps + 2, 1):
+                hwc.rates.append(0.08 - 0.05 * math.exp(-0.18 * i))
+
     hwc.execute()
     graph = draw_data(hwc)
     return render(request, 'test.html', {"hw": hwc, 'graph': graph})
+
 
 def documentation(request):
     return render(request, 'document.html')
@@ -49,11 +67,20 @@ def api_hullwhite_auto(request):
     hwc.maturity = 5
     hwc.alpha = 0.1
     hwc.volatility = 0.014
-    hwc.period ="year"
+    hwc.period = "year"
     hwc.nbr_steps = 5
     hwc.rates = []
     for i in range(0, 6, 1):
         hwc.rates.append(0.08 - 0.05 * math.exp(-0.18 * i))
+
+    try:
+        parseRequest(request=request, hwc = hwc)
+        if len(hwc.rates) < hwc.nbr_steps + 1:
+            for i in range(len(hwc.rates), hwc.nbr_steps + 2, 1):
+                hwc.rates.append(0.08 - 0.05 * math.exp(-0.18 * i))
+    except:
+        pass
+
     hwc.execute()
     return JsonResponse(hwc.as_json())
 
@@ -94,35 +121,16 @@ def draw_data(hw):
     return html_fig
 
 
-def parseRequest(request):
-    hwc = HWCalculator()
-    try:
-        maturity = math.fabs(float(request.POST.get('maturity')))
-        if maturity < 0.01 or maturity > 100:
-            maturity = 5
-    except:
-        maturity = 5
-
+def parseRequest(request,hwc):
+    maturity = math.fabs(float(request.POST.get('maturity')))
     hwc.maturity = maturity
-
-    try:
-        alpha = math.fabs(float(request.POST.get('alpha')))
-        if alpha < 0.001 or alpha > 100:
-            alpha = 0.1
-    except:
-        alpha = 0.1
-
+    alpha = math.fabs(float(request.POST.get('alpha')))
     hwc.alpha = alpha
-
-    try:
-        volatility = math.fabs(float(request.POST.get('volatility')))
-        if volatility < 0.0 or volatility > 100:
-            volatility = 0.01
-    except:
-        volatility = 0.01
-
+    volatility = math.fabs(float(request.POST.get('volatility')))
     hwc.volatility = volatility
-    period_name = request.GET.get('period','year')
+
+    period_name = request.POST.get('period','year')
+    print(period_name)
     period = get_period_value(period_name)
     hwc.nbr_steps = int(maturity * period)
     hwc.period = period_name

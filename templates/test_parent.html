@@ -187,11 +187,10 @@
                         <div class="col-md-2">
                             <div class="form-group row">
                                 <div class="col-xs-12">
-                                    <label for="rate">Entrer les taux </label><br>
-                                    <form>
-                                        <input type="radio" name="source_rate" value="manual" checked
-                                               style="margin-left: 10px" onchange="onManual()"> Manual
-                                    </form>
+                                    <label for="rate">Generated Interest rate :<br>
+
+                                     0.08 - 0.05Exp(-0.18ti)
+                                    </label><br>
                                 </div>
                             </div>
                         </div>
@@ -259,6 +258,8 @@
             var element = document.createElement("input");
             element.setAttribute("name", "rate");
             element.setAttribute("id", "rate" + i);
+            element.setAttribute("disabled",true);
+            element.setAttribute("value",(0.08 - 0.05 * Math.exp(-0.18 * i)))
             element.setAttribute("style", "border: 2px solid #CCC; width:80px;height:40px; margin : 10px; padding: 10px");
             var newlabel = document.createElement("Label");
             newlabel.setAttribute("for", "rate" + i);
