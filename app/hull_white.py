@@ -98,8 +98,9 @@ class HWCalculator:
 
         M = -alpha * dt
         dr = sig * math.sqrt(3 * dt)
-        jmax = int(math.ceil(-0.1835 / M))
+        jmax = int(math.ceil(-0.184 / M))
         jmin = -jmax
+
         self.jmax = jmax
 
         # Create empty graph
@@ -189,6 +190,9 @@ class HWCalculator:
                     node.j_up = j + 1
                     node.j_m = j
                     node.j_d = j - 1
+                    if i == 1 and j == -1 :
+                        print(node.as_json());
+
         return 0
 
     def find_connected_node(self, current_node, node_of_previous_step):
@@ -211,16 +215,3 @@ class HWCalculator:
 
             if node.j_d == current_node.j:
                 current_node.q += node.q * node.pd * math.exp(-(previous_a + node.j_d * dr) * dt)
-
-    def compute_drift(self, i, jmax, dt, dr, P, hwsteps):
-        top_node = min(i, jmax)
-        sum = 0
-        for j in range(-top_node, top_node + 1, 1):
-            node = hwsteps[i].nodes[j + top_node]
-            sum += node.q * math.exp(-j * dt * dr)
-        return (math.log(sum) - math.log(P[i + 1])) / dt
-
-    def update_rate(self, a, current_step):
-        current_step.a = a
-        for node in current_step.nodes:
-            node.rate += a
