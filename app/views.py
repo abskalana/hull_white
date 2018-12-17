@@ -28,11 +28,11 @@ def home(request):
 
 def auto_generate(request):
     hwc = HWCalculator()
-    hwc.maturity = 5
+    hwc.maturity = 1.5
     hwc.alpha = 0.1
-    hwc.period = 'year'
+    hwc.period = 'month'
     hwc.volatility = 0.01
-    hwc.nbr_steps = 5
+    hwc.nbr_steps = 18
     for i in range(len(hwc.rates), hwc.nbr_steps + 2, 1):
         hwc.rates.append(0.08 - 0.05 * math.exp(-0.18 * i))
 
@@ -127,7 +127,7 @@ def draw_data(hw):
 
     ax.set_xlabel('Maturity')
     ax.set_ylabel('Rate')
-    ax.set_title('Hull White interest rate')
+    ax.set_title('Hull White trinomial')
     ax.grid(True)
     html_fig = mpld3.fig_to_html(fig, template_type='general')
     plt.close(fig)
