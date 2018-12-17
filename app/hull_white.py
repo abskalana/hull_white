@@ -38,8 +38,8 @@ class GraphNode:
         self.j_m = j_m
         self.j_d = j_d
         self.pu = pu
+        self.pm = pm
         self.pd = pd
-        self.pm = pd
         if i == 0 and self.j == 0:
             self.q = 1
         else:
@@ -67,11 +67,11 @@ class HWCalculator:
     def __init__(self):
         self.steps = []
         self.jmax = 0
-        self.maturity = 0
+        self.maturity = 5
         self.period = 'year'
-        self.nbr_steps = 1
-        self.volatility = 0.0
-        self.alpha = 0.0
+        self.nbr_steps = 5
+        self.volatility = 0.01
+        self.alpha = 0.1
         self.rates = []
 
     def as_json(self):
@@ -191,7 +191,7 @@ class HWCalculator:
                     node.j_m = j
                     node.j_d = j - 1
                     if i == 1 and j == -1 :
-                        print(node.as_json());
+                        print(node.as_json())
 
         return 0
 
