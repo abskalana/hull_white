@@ -116,10 +116,12 @@ def draw_data(hw):
             plot([i, i + 1], [node.rate * 100, up.rate * 100])
             plot([i, i + 1], [node.rate * 100, m.rate * 100])
             plot([i, i + 1], [node.rate * 100, dw.rate * 100])
-            ax.annotate(node.id, xy=(i, node.rate*100), xytext=(i * 0.95, node.rate*100 * 0.90), fontsize=13, color='blue')
+            if N< 8:
+                ax.annotate(node.id, xy=(i, node.rate*100), xytext=(i * 0.95, node.rate*100 * 0.90), fontsize=13, color='blue')
 
     for node in hw.steps[N-1].nodes:
-        ax.annotate(node.id, xy=(N-1, node.rate * 100), xytext=((N-1) * 0.95, node.rate * 100 * 0.90), fontsize=13,color='blue')
+        if N < 8:
+            ax.annotate(node.id, xy=(N-1, node.rate * 100), xytext=((N-1) * 0.95, node.rate * 100 * 0.90), fontsize=13,color='blue')
 
     # get_min_rate
 
