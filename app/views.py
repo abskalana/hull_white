@@ -96,6 +96,9 @@ def draw_data(hw):
     N = hw.nbr_steps
     min_rate = hw.steps[0].nodes[0].rate
 
+    names_set = []
+    names = []
+
     max_rate = min_rate
     for i in range(0, N - 1, 1):
         top_node = min(i, hw.jmax)
@@ -113,6 +116,7 @@ def draw_data(hw):
             plot([i, i + 1], [node.rate * 100, up.rate * 100])
             plot([i, i + 1], [node.rate * 100, m.rate * 100])
             plot([i, i + 1], [node.rate * 100, dw.rate * 100])
+            ax.annotate(node.id, xy=(i, node.rate*100), xytext=(i * 0.95, node.rate*100 * 0.90), fontsize=13, color='blue')
 
     # get_min_rate
 
