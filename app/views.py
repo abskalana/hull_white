@@ -128,17 +128,29 @@ def draw_data(hw):
 
 
 def parseRequest(request,hwc):
-    alpha = math.fabs(float(request.POST.get('alpha', 0.1)))
-    hwc.alpha = alpha
-    volatility = math.fabs(float(request.POST.get('volatility', 0.01)))
-    hwc.volatility = volatility
-    maturity = math.fabs(float(request.POST.get('maturity',0.05)))
-    hwc.maturity = maturity
-    period_name = request.POST.get('period','year')
-    print(period_name)
-    period = get_period_value(period_name)
-    hwc.nbr_steps = int(maturity * period)
-    hwc.period = period_name
+    print(request.POST.get('alpha', '0.1'))
+    try:
+        hwc.alpha = math.fabs(float(request.POST.get('alpha', 0.1)))
+    except :
+        pass
+
+    try:
+        hwc.volatility = math.fabs(float(request.POST.get('volatility', 0.01)))
+    except :
+        pass
+
+    try:
+        hwc.maturity = math.fabs(float(request.POST.get('maturity', 5.0)))
+    except :
+        pass
+
+    try:
+        hwc.period= request.POST.get('period','year')
+        period = get_period_value(hwc.period)
+        hwc.nbr_steps = int(hwc.maturity * period)
+    except :
+        pass
+
     rates_p = request.POST.getlist("rate")
     rate_float = []
     for item in rates_p:
