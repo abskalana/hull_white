@@ -93,11 +93,10 @@ def api_hullwhite_auto(request):
 
 def draw_data(hw):
     fig, ax = plt.subplots()
+    fig.set_size_inches(14, 7)
     N = hw.nbr_steps
     min_rate = hw.steps[0].nodes[0].rate
 
-    names_set = []
-    names = []
 
     max_rate = min_rate
     for i in range(0, N - 1, 1):
@@ -125,8 +124,7 @@ def draw_data(hw):
 
     # get_min_rate
 
-    ax.set_xlim(0, N + 1)
-    ax.set_ylim(-min_rate * 100 - 5, max_rate * 100 + 5)
+
     ax.set_xlabel('Maturity')
     ax.set_ylabel('Rate')
     ax.set_title('Hull White interest rate')
