@@ -70,11 +70,11 @@ def api_hullwhite(request):
 
 def api_hullwhite_auto(request):
     hwc = HWCalculator()
-    hwc.maturity = 10
+    hwc.maturity = 5
     hwc.alpha = 0.1
     hwc.volatility = 0.014
     hwc.period = "year"
-    hwc.nbr_steps = 10
+    hwc.nbr_steps = 5
     hwc.rates = []
     for i in range(0, hwc.nbr_steps, 1):
         hwc.rates.append(0.08 - 0.05 * math.exp(-0.18 * i))
