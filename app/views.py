@@ -28,9 +28,9 @@ def home(request):
 
 def auto_generate(request):
     hwc = HWCalculator()
-    hwc.maturity = 1.5
+    hwc.maturity = 18
     hwc.alpha = 0.1
-    hwc.period = 'month'
+    hwc.period = 'year'
     hwc.volatility = 0.01
     hwc.nbr_steps = 18
     for i in range(len(hwc.rates), hwc.nbr_steps + 2, 1):
@@ -57,11 +57,11 @@ def about(request):
 
 def api_hullwhite(request):
     hwc = HWCalculator()
-    hwc.maturity = 5
+    hwc.maturity = 10
     hwc.alpha = 0.1
     hwc.volatility = 0.014
     hwc.period = "year"
-    hwc.nbr_steps = 5
+    hwc.nbr_steps = 10
     hwc.rates = []
     parseRequest(request=request,hwc =  hwc)
     if len(hwc.rates) >= hwc.nbr_steps + 1:
@@ -70,13 +70,13 @@ def api_hullwhite(request):
 
 def api_hullwhite_auto(request):
     hwc = HWCalculator()
-    hwc.maturity = 5
+    hwc.maturity = 10
     hwc.alpha = 0.1
     hwc.volatility = 0.014
     hwc.period = "year"
-    hwc.nbr_steps = 5
+    hwc.nbr_steps = 10
     hwc.rates = []
-    for i in range(0, 6, 1):
+    for i in range(0, hwc.nbr_steps, 1):
         hwc.rates.append(0.08 - 0.05 * math.exp(-0.18 * i))
 
     try:
@@ -147,7 +147,7 @@ def parseRequest(request,hwc):
         pass
 
     try:
-        hwc.maturity = math.fabs(float(request.POST.get('maturity', 5.0)))
+        hwc.maturity = math.fabs(float(request.POST.get('maturity', 20.0)))
     except :
         pass
 
